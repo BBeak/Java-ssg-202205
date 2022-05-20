@@ -65,35 +65,31 @@ public class App {
 					if (fdarticle.id == getId) {
 						fdarticle.increastHit();
 						System.out.printf("		번호		|		제목		|		내용		|		조회수		\n");
-						System.out.printf("		%d		|		%s		|		%s		|		%d		\n", fdarticle.id, fdarticle.title,
+						System.out.printf("		%4d		|		%4s		|		%s		|		%d		\n", fdarticle.id, fdarticle.title,
 								fdarticle.body, fdarticle.hit);
 
 					}
 				}
 			} else if (command.startsWith("article delete")) {
 				String[] commandsBits = command.split(" ");
-				int getId = Integer.parseInt(commandsBits[2]);
-				Article fdarticle = null;
-				for (int i = 0; i < list.size(); i++) {
-					fdarticle = list.get(i);
-					if (fdarticle.id == getId) {
-						list.remove(i);
-					}
+				int id = Integer.parseInt(commandsBits[2]);
+				
+				
+				int foundIndex = getArticleIndexById(id);
+				if (foundIndex == -1) {
+					System.out.printf("%d번 게시물은 존재하지 않습니다.",id);
 				}
+				System.out.printf("%d번 게시물이 삭제되었습니다\n", id);
+				list.remove(foundIndex);
+				
 			} else if (command.startsWith("article modify")) {
 				String[] commandBits = command.split(" ");
 				int id = Integer.parseInt(commandBits[2]);
 
-				Article fdarticle = null;
+				Article fdarticle = getArticleById(id);
 
-				for (int i = 0; i < list.size(); i++) {
-					Article article = list.get(i);
-
-					if (article.id == id) {
-						fdarticle = article;
-						break;
-					}
-				}
+				
+				
 				if (fdarticle == null) {
 					System.out.printf("%d번 게시물을 존재하지 않습니다.");
 				}
@@ -128,5 +124,30 @@ public class App {
 		
 		
 	}
+	private int getArticleIndexById(int id) {
+		int i =0; 
+		for (Article article : list) {
+			if (article.id == id) {
+				return i;
+			}
+			i++;
+			
+		}
+		return -1;
+	}
+	private Article getArticleById(int id) {
+		int index = getArticleIndexById(id);
+		for (Article article : list) {
+			
+			if (article.id == id) {
+				return article;
+				
+			}
+			}
+			return null;	
+		}
+		
+		
+	}
 
-}
+
