@@ -37,20 +37,21 @@ public class App {
 				String title = sc.nextLine();
 				System.out.print("내용 ) ");
 				String body = sc.nextLine();
-				Article article = new Article(lastArticleid, title, body);
+				String regDate = Util.getNowDatestr();
+				Article article = new Article(lastArticleid, title, body, regDate);
 				list.add(article);
-				System.out.printf("%d번째 게시물이 등록되었습니다.\n", lastId);
+				System.out.printf("%d번째 게시물이 등록되었습니다. Regstered Time : %s\n", lastId, regDate);
 			} else if (command.equals("article list")) {
 				if (list.size() == 0) {
 					System.out.print("등록된 게시물이 없습니다\n");
 					continue;
 				}
-				System.out.print("	번호	|	제목	|	조회수\n");
+				System.out.printf("		번호		|			제목		|		조회수		|		게시시간		\n");
 				if (list.size() != 0) {
 					for (int i = 0; i < list.size(); i++) {
 						Article article = list.get(i);
 
-						System.out.printf("	%d	|	%s	|	%d\n", article.id, article.title, hit);
+						System.out.printf("			%d		|		%s		|		%d		|		%s\n", article.id, article.title, hit, article.regDate);
 					}
 				}
 			} else if (command.startsWith("article detail")) {
@@ -64,9 +65,9 @@ public class App {
 
 					if (fdarticle.id == getId) {
 						fdarticle.increastHit();
-						System.out.printf("		번호		|		제목		|		내용		|		조회수		\n");
-						System.out.printf("		%4d		|		%4s		|		%s		|		%d		\n", fdarticle.id, fdarticle.title,
-								fdarticle.body, fdarticle.hit);
+						System.out.printf("			번호		|		제목		|		내용		|		조회수		|		등록시간		|\n");
+						System.out.printf("			%d		|		%s		|		%s		|		%d			|		%s			|\n", fdarticle.id, fdarticle.title,
+								fdarticle.body, fdarticle.hit, fdarticle.regDate);
 
 					}
 				}
@@ -118,9 +119,9 @@ public class App {
 	private void makeTestData() {
 		System.out.println("테스트를 위한 데이터를 생성합니다.");
 		
-		list.add(new Article(1, "제목1", "내용1"));
-		list.add(new Article(2, "제목2", "내용2"));
-		list.add(new Article(3, "제목3", "내용3"));
+		list.add(new Article(1, "제목1", "내용1", Util.getNowDatestr() ));
+		list.add(new Article(2, "제목2", "내용2", Util.getNowDatestr()));
+		list.add(new Article(3, "제목3", "내용3", Util.getNowDatestr()));
 		
 		
 	}
