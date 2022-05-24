@@ -129,7 +129,7 @@ public class App {
 					loginId = sc.nextLine();
 
 					if (isJoinableId(loginId) == false) {
-						System.out.printf("%s는 이미 사용중인 계정입니다.",loginId);
+						System.out.printf("%s는 이미 사용중인 계정입니다.\n", loginId);
 						continue;
 					}
 					break;
@@ -153,7 +153,25 @@ public class App {
 				Member member = new Member(id, loginId, loginPw, regDate);
 				members.add(member);
 				System.out.printf("%d번째 회원이 가입되었습니다. Regstered Time : %s\n", id, regDate);
-			} else {
+			} else if (command.equals("sign in")) {
+				Member user = null;
+				while (true) {
+					System.out.print("User Id )");
+					String userId = sc.nextLine();
+					System.out.print("User Pw )");
+					String userPw = sc.nextLine();
+					user = signin(userId, userPw);
+					
+					if (user == null) {
+					continue;
+					
+				}else {
+					break;
+				}
+			}
+			}
+
+			else {
 				System.out.printf("%s는 올바른 명령어가 아닙니다.\n", command);
 
 			}
@@ -167,24 +185,38 @@ public class App {
 
 	private boolean isJoinableId(String loginId) {
 		int index = getMemberindexById(loginId);
-			
-				if( index == -1) {
-					return true;
-				}
-			
-		
+
+		if (index == -1) {
+			return true;
+		}
+
 		return false;
 	}
 
 	private int getMemberindexById(String loginId) {
-		int i = 0; 
+		int i = 0;
 		for (Member member : members) {
-			if(member.loginId.equals(loginId)) {
+			if (member.loginId.equals(loginId)) {
 				return i;
 			}
-			
+
 		}
 		return -1;
+	}
+
+	private Member signin(String id, String password) {
+
+		for (Member member : members) {
+			if (member.loginId.equals(id) && member.loginPw.equals(password)) {
+				System.out.printf("%s님 로그인을 환영합니다.\n", id);
+				return member;
+			} else {
+				System.out.println("Id 혹은 Pw가 일치하지 않습니다. 다시 확인해주세요");
+			}
+			
+		
+		}
+		return null;
 	}
 
 	private void makeTestData() {
