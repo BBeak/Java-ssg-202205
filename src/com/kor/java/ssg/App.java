@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.kor.java.ssg.controller.ArticleController;
+import com.kor.java.ssg.controller.MemberController;
 import com.kor.java.ssg.dto.Article;
 import com.kor.java.ssg.dto.Member;
 import com.kor.java.ssg.util.Util;
@@ -20,7 +22,9 @@ public class App {
 	public void start() {
 		System.out.println("==== 프로그램 시작 ====");
 		makeTestData();
-
+		
+		MemberController memberController = new MemberController(sc, members);
+		ArticleController articleController = new ArticleController();
 		Scanner sc = new Scanner(System.in);
 		int lastArticleid = 3;
 		int hit = 0;
@@ -121,37 +125,8 @@ public class App {
 				System.out.printf("%d번 게시물이 수정되었습니다.\n", id);
 
 			} else if (command.equals("sign up")) {
-				int id = members.size() + 1;
-				String loginId = null;
-				while (true) {
-					System.out.print("User Id :");
-					loginId = sc.nextLine();
-
-					if (isJoinableId(loginId) == false) {
-						System.out.printf("%s는 존재하지 않는 회원입니다.\n", loginId);
-						continue;
-					}
-					break;
-				}
-				String loginPw = null;
-				String loginPwCf = null;
-
-				while (true) {
-					System.out.print("PASSWORD ) ");
-					loginPw = sc.nextLine();
-					System.out.print("PASSWORD CONFIRM ) ");
-					loginPwCf = sc.nextLine();
-
-					if (loginPw.equals(loginPwCf) == false) {
-						System.out.printf("비밀번호가 일치하지 않습니다 다시 입력하여주십시오.\n");
-						continue;
-					}
-					break;
-				}
-				String regDate = Util.getNowDatestr();
-				Member member = new Member(id, loginId, loginPw, regDate);
-				members.add(member);
-				System.out.printf("%d번째 회원가입이 완료되었습니다. Regstered Time : %s\n", id, regDate);
+				memberController.doSignUp(sc);
+			
 			} else if (command.equals("sign in")) {
 				Member user = null;
 				while (true) {
@@ -182,26 +157,9 @@ public class App {
 
 	}
 
-	private boolean isJoinableId(String loginId) {
-		int index = getMemberindexById(loginId);
+	
 
-		if (index == -1) {
-			return true;
-		}
-
-		return false;
-	}
-
-	private int getMemberindexById(String loginId) {
-		int i = 0;
-		for (Member member : members) {
-			if (member.loginId.equals(loginId)) {
-				return i;
-			}
-
-		}
-		return -1;
-	}
+	
 
 	private Member signin(String id, String password) {
 
