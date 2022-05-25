@@ -10,7 +10,7 @@ public class MemberController {
 	private List<Member>members;
 	private Scanner sc;
 	
-	MemberController(Scanner sc, List<Member>members){
+	public MemberController(Scanner sc, List<Member>members){
 		this.members = members;
 		this.sc = sc;
 	}
@@ -37,8 +37,9 @@ public class MemberController {
 	}
 
 	
-	public void doSignUp() {
+	public void doSignUp(Scanner sc) {
 		int id = members.size() + 1;
+		String regDate = Util.getNowDatestr();
 		String loginId = null;
 		while (true) {
 			System.out.print("User Id :");
@@ -62,15 +63,50 @@ public class MemberController {
 			if (loginPw.equals(loginPwCf) == false) {
 				System.out.printf("비밀번호가 일치하지 않습니다 다시 입력하여주십시오.\n");
 				continue;
-			}
-		}
+			}else {
 		
-			String regDate = Util.getNowDatestr();
+			break;
+			
+			}
+			
+			}
+		
 			Member member = new Member(id, loginId, loginPw, regDate);
 			members.add(member);
 			System.out.printf("%d번째 회원가입이 완료되었습니다. Regstered Time : %s\n", id, regDate);
-			break;
+			
+			
+			
+		
 	}
+	public void doSignIn(Scanner sc) {
+		
+		Member user = null;
+		while (true) {
+			System.out.print("User Id )");
+			String userId = sc.nextLine();
+			System.out.print("User Pw )");
+			String userPw = sc.nextLine();
+			user = signin(userId, userPw);
+			
+			if (user == null) {
+			continue;
+			
+	}
+		}
+	}
+			private Member signin(String id, String password) {
 
+				for (Member member : members) {
+					if (member.loginId.equals(id) && member.loginPw.equals(password)) {
+						System.out.printf("%s님 환영합니다.\n", id);
+						return member;
+					} else {
+						System.out.println("Id 나 pw가 일치하지 않습니다.\n");
+						continue;
+					}
 }
+				return null;
 
+			}
+}

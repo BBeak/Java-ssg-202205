@@ -22,11 +22,12 @@ public class App {
 	public void start() {
 		System.out.println("==== 프로그램 시작 ====");
 		makeTestData();
+		Scanner sc = new Scanner(System.in);
 		
 		MemberController memberController = new MemberController(sc, members);
-		ArticleController articleController = new ArticleController();
-		Scanner sc = new Scanner(System.in);
-		int lastArticleid = 3;
+		ArticleController articleController = new ArticleController(sc, list);
+		
+		
 		int hit = 0;
 
 		while (true) {
@@ -36,64 +37,15 @@ public class App {
 			if (command.equals("System exit")) {
 
 				break;
+				
+				
 			} else if (command.equals("article write")) {
-				int lastId = lastArticleid += 1;
-				lastArticleid = lastId;
-				System.out.print("제목 ) ");
-				String title = sc.nextLine();
-				System.out.print("내용 ) ");
-				String body = sc.nextLine();
-				String regDate = Util.getNowDatestr();
-				Article article = new Article(lastArticleid, title, body, regDate);
-				list.add(article);
-				System.out.printf("%d번째 게시물이 등록되었습니다.. Regstered Time : %s\n", lastId, regDate);
+				articleController.dowrite();
 			} else if (command.startsWith("article list")) {
-
-				String searchKeyword = command.substring("article list".length()).trim();
-				List<Article> forListArticles = list;
-
-				if (searchKeyword.length() > 0) {
-					forListArticles = new ArrayList<>();
-					for (Article article : list) {
-						if (article.title.contains(searchKeyword)) {
-							forListArticles.add(article);
-						}
-
-					}
-				}
-				if (list.size() == 0) {
-					System.out.print("현재 등록된 게시물이 없습니다. \n");
-					continue;
-				}
-				System.out.printf("		제목		|		제목		|		조회수		|		등록시간		\n");
-
-				for (int i = forListArticles.size() - 1; i >= 0; i--) {
-					Article article = forListArticles.get(i);
-
-					System.out.printf("			%d		|		%s		|		%d		|		%s\n", article.id,
-							article.title, hit, article.regDate);
-				}
-
+				articleController.showList(command);
+				
 			} else if (command.startsWith("article detail ")) {
-				String[] commandsBits = command.split(" ");
-				int getId = Integer.parseInt(commandsBits[2]);
-				System.out.println(getId);
-
-				Article fdarticle = null;
-
-				for (int i = 0; i < list.size(); i++) {
-					fdarticle = list.get(i);
-
-					if (fdarticle.id == getId) {
-						fdarticle.increastHit();
-						System.out.printf(
-								"			번호		|		제목		|		내용		|		조회수		|	  등록시간		|\n");
-						System.out.printf(
-								"			%d		|		%s		|		%s		|		%d			|		%s			|\n",
-								fdarticle.id, fdarticle.title, fdarticle.body, fdarticle.hit, fdarticle.regDate);
-
-					}
-				}
+				articleController.showDetail(command);
 			} else if (command.startsWith("article delete ")) {
 				String[] commandsBits = command.split(" ");
 				int id = Integer.parseInt(commandsBits[2]);
@@ -128,21 +80,8 @@ public class App {
 				memberController.doSignUp(sc);
 			
 			} else if (command.equals("sign in")) {
-				Member user = null;
-				while (true) {
-					System.out.print("User Id )");
-					String userId = sc.nextLine();
-					System.out.print("User Pw )");
-					String userPw = sc.nextLine();
-					user = signin(userId, userPw);
-					
-					if (user == null) {
-					continue;
-					
-				}else {
-					break;
-				}
-			}
+				memberController.doSignIn(sc);
+			
 			}
 
 			else {
@@ -161,21 +100,7 @@ public class App {
 
 	
 
-	private Member signin(String id, String password) {
-
-		for (Member member : members) {
-			if (member.loginId.equals(id) && member.loginPw.equals(password)) {
-				System.out.printf("%s님 환영합니다.\n", id);
-				return member;
-			} else {
-				System.out.println("Id 나 pw가 일치하지 않습니다.\n");
-			}
-			
-		
-		}
-		return null;
-	}
-
+	
 	private void makeTestData() {
 		System.out.println("==테스트 데이터를 생성합니다..==");
 
