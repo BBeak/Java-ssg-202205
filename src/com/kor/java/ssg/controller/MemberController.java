@@ -6,13 +6,28 @@ import java.util.Scanner;
 import com.kor.java.ssg.dto.Member;
 import com.kor.java.ssg.util.Util;
 
-public class MemberController {
+public class MemberController extends Controller {
 	private List<Member>members;
 	private Scanner sc;
+	private String command;
+	private String actionMethodName;
 	
 	public MemberController(Scanner sc, List<Member>members){
 		this.members = members;
 		this.sc = sc;
+	}
+	public void doAction(String command, String actionMethodName) {
+		this.command = command; 
+		this.actionMethodName = actionMethodName;
+		
+		switch(actionMethodName){
+		case "signup" : 
+			doSignUp();
+			break;
+		case "signin" :
+			doSignIn();
+			break;
+		}
 	}
 	
 	private int getMemberindexById(String loginId) {
@@ -37,7 +52,7 @@ public class MemberController {
 	}
 
 	
-	public void doSignUp(Scanner sc) {
+	public void doSignUp() {
 		int id = members.size() + 1;
 		String regDate = Util.getNowDatestr();
 		String loginId = null;
@@ -79,7 +94,7 @@ public class MemberController {
 			
 		
 	}
-	public void doSignIn(Scanner sc) {
+	public void doSignIn() {
 		
 		Member user = null;
 		while (true) {
@@ -109,4 +124,5 @@ public class MemberController {
 				return null;
 
 			}
+			
 }

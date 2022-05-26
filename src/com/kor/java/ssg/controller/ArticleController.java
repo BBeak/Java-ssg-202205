@@ -7,17 +7,42 @@ import java.util.Scanner;
 import com.kor.java.ssg.dto.Article;
 import com.kor.java.ssg.util.Util;
 
-public class ArticleController {
+public class ArticleController extends Controller {
 	private List<Article> list;
 	private Scanner sc;
 	private int hit;
+	private String command;
+	private String actionMethodName;
 
 	public ArticleController(Scanner sc, List<Article> list) {
 		this.list = list;
 		this.sc = sc;
 	}
+	public void doAction(String command, String actionMethodName) {
+		this.command = command;
+		this.actionMethodName = actionMethodName;
+		
+		switch(actionMethodName) {
+		case "list" :
+			showList();
+			break;
+		case "write" :
+			doWrite();
+			break;
+		case "delete" : 
+			doDelete();
+			break;
+		case "modify" :
+			doModify();
+			break;
+		case "detail" : 
+			showDetail();
+			break;
+		
+		}
+	}
 
-	public void dowrite() {
+	private void doWrite() {
 
 		int lastId = list.size() + 1;
 		System.out.print("제목 ) ");
@@ -30,7 +55,7 @@ public class ArticleController {
 		System.out.printf("%d번째 게시물이 등록되었습니다.. Regstered Time : %s\n", lastId, regDate);
 	}
 
-	public void showList(String command) {
+	private void showList() {
 		String searchKeyword = command.substring("article list".length()).trim();
 		List<Article> forListArticles = list;
 
@@ -45,9 +70,9 @@ public class ArticleController {
 		}
 		if (list.size() == 0) {
 			System.out.print("현재 등록된 게시물이 없습니다. \n");
-			
+
 		}
-		System.out.printf("		제목		|		제목		|		조회수		|		등록시간		\n");
+		System.out.printf("		제목			|		제목		|		조회수		|		등록시간		\n");
 
 		for (int i = forListArticles.size() - 1; i >= 0; i--) {
 			Article article = forListArticles.get(i);
@@ -58,7 +83,7 @@ public class ArticleController {
 
 	}
 
-	public void showDetail(String command) {
+	private void showDetail() {
 		String[] commandsBits = command.split(" ");
 		int getId = Integer.parseInt(commandsBits[2]);
 		System.out.println(getId);
@@ -75,8 +100,40 @@ public class ArticleController {
 				System.out.printf(
 						"			%d		|		%s		|		%s		|		%d			|		%s			|\n",
 						fdarticle.id, fdarticle.title, fdarticle.body, fdarticle.hit, fdarticle.regDate);
-	}
+			}
 		}
+	}
+	private void doDelete() {
+		String[] commandsBits = command.split(" ");
+		int id = Integer.parseInt(commandsBits[2]);
+
+		int foundIndex = getArticleIndexById(id);
+		if (foundIndex == -1) {
+			System.out.printf("%d번쨰 게시물은 존재하지 않습니다.\n", id);
+		}
+		System.out.printf("%d번째 게시물을 삭제하였습니다.\n", id);
+		list.remove(foundIndex);
+	}
+	private void doModify() {
+		String[] commandBits = command.split(" ");
+		int id = Integer.parseInt(commandBits[2]);
+
+		Article fdarticle = getArticleById(id);
+
+		if (fdarticle == null) {
+			System.out.printf("%d번째 게시물은 존재하지 않습니다.\n");
+		}
+		System.out.printf("제목 )");
+		String title = sc.nextLine();
+		System.out.printf("내용 )");
+		String body = sc.nextLine();
+
+		fdarticle.title = title;
+		fdarticle.body = body;
+
+		System.out.printf("%d번 게시물이 수정되었습니다.\n", id);
+
+		
 	}
 	private int getArticleIndexById(int id) {
 		int i = 0;
@@ -101,4 +158,15 @@ public class ArticleController {
 		}
 		return null;
 	}
+
+	public void domakeTestData() {
+		System.out.println("==테스트 데이터를 생성합니다..==");
+
+		list.add(new Article(1, "제목1", "내용1", Util.getNowDatestr()));
+		list.add(new Article(2, "제목2", "내용2", Util.getNowDatestr()));
+		list.add(new Article(3, "제목3", "내용3", Util.getNowDatestr()));
+
+		
+	}
+
 }
