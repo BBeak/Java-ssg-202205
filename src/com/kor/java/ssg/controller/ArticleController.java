@@ -27,6 +27,9 @@ public class ArticleController extends Controller {
 			showList();
 			break;
 		case "write" :
+			if(isSignined() == false) {
+				System.out.println("please write article after signin");
+			}
 			doWrite();
 			break;
 		case "delete" : 
@@ -38,6 +41,8 @@ public class ArticleController extends Controller {
 		case "detail" : 
 			showDetail();
 			break;
+		default :
+			System.out.print("this command is not exist\n");
 		
 		}
 	}
@@ -50,7 +55,7 @@ public class ArticleController extends Controller {
 		System.out.print("내용 ) ");
 		String body = sc.nextLine();
 		String regDate = Util.getNowDatestr();
-		Article article = new Article(lastId, title, body, regDate);
+		Article article = new Article(lastId, title, body, loginedMemer.name, regDate);
 		list.add(article);
 		System.out.printf("%d번째 게시물이 등록되었습니다.. Regstered Time : %s\n", lastId, regDate);
 	}
@@ -72,13 +77,13 @@ public class ArticleController extends Controller {
 			System.out.print("현재 등록된 게시물이 없습니다. \n");
 
 		}
-		System.out.printf("		제목			|		제목		|		조회수		|		등록시간		\n");
+		System.out.printf("		제목			|		제목		|		조회수		|		작성자		|		등록시간		\n");
 
 		for (int i = forListArticles.size() - 1; i >= 0; i--) {
 			Article article = forListArticles.get(i);
 
-			System.out.printf("			%d		|		%s		|		%d		|		%s\n", article.id,
-					article.title, hit, article.regDate);
+			System.out.printf("			%d		|		%s		|		%d		|		%s		|		%s\n", article.id,
+					article.title, hit, loginedMemer.name, article.regDate);
 		}
 
 	}
@@ -142,7 +147,6 @@ public class ArticleController extends Controller {
 				return i;
 			}
 			i++;
-
 		}
 		return -1;
 	}
@@ -160,11 +164,11 @@ public class ArticleController extends Controller {
 	}
 
 	public void domakeTestData() {
-		System.out.println("==테스트 데이터를 생성합니다..==");
+		System.out.println("== 테스트 데이터를 생성합니다..==");
 
-		list.add(new Article(1, "제목1", "내용1", Util.getNowDatestr()));
-		list.add(new Article(2, "제목2", "내용2", Util.getNowDatestr()));
-		list.add(new Article(3, "제목3", "내용3", Util.getNowDatestr()));
+		list.add(new Article(1, "제목1", "내용1", "master", Util.getNowDatestr()));
+		list.add(new Article(2, "제목2", "내용2", "master", Util.getNowDatestr()));
+		list.add(new Article(3, "제목3", "내용3", "master", Util.getNowDatestr()));
 
 		
 	}
