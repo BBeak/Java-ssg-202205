@@ -29,6 +29,7 @@ public class ArticleController extends Controller {
 		case "write" :
 			if(isSignined() == false) {
 				System.out.println("please write article after signin");
+				break;
 			}
 			doWrite();
 			break;
@@ -45,6 +46,7 @@ public class ArticleController extends Controller {
 			System.out.print("this command is not exist\n");
 		
 		}
+	
 	}
 
 	private void doWrite() {
@@ -55,7 +57,7 @@ public class ArticleController extends Controller {
 		System.out.print("내용 ) ");
 		String body = sc.nextLine();
 		String regDate = Util.getNowDatestr();
-		Article article = new Article(lastId, title, body, loginedMemer.name, regDate);
+		Article article = new Article(lastId, regDate, regDate, loginedMember.id, title, body);
 		list.add(article);
 		System.out.printf("%d번째 게시물이 등록되었습니다.. Regstered Time : %s\n", lastId, regDate);
 	}
@@ -83,7 +85,7 @@ public class ArticleController extends Controller {
 			Article article = forListArticles.get(i);
 
 			System.out.printf("			%d		|		%s		|		%d		|		%s		|		%s\n", article.id,
-					article.title, hit, loginedMemer.name, article.regDate);
+					article.title, hit, loginedMember.name, article.regDate);
 		}
 
 	}
@@ -122,12 +124,13 @@ public class ArticleController extends Controller {
 	private void doModify() {
 		String[] commandBits = command.split(" ");
 		int id = Integer.parseInt(commandBits[2]);
-
+		
 		Article fdarticle = getArticleById(id);
 
 		if (fdarticle == null) {
 			System.out.printf("%d번째 게시물은 존재하지 않습니다.\n");
 		}
+		if (fdarticle.memberId != loginedMember.id)
 		System.out.printf("제목 )");
 		String title = sc.nextLine();
 		System.out.printf("내용 )");

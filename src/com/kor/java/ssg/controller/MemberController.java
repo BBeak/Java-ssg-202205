@@ -8,44 +8,46 @@ import com.kor.java.ssg.dto.Member;
 import com.kor.java.ssg.util.Util;
 
 public class MemberController extends Controller {
-	private List<Member>members;
+	private List<Member> members;
 	private Scanner sc;
 	private String command;
 	private String actionMethodName;
-	public Member loginedMember;
 	
-	public MemberController(Scanner sc, List<Member>members){
+
+	public MemberController(Scanner sc, List<Member> members) {
 		this.members = members;
 		this.sc = sc;
 	}
+
 	public void doAction(String command, String actionMethodName) {
-		this.command = command; 
+		this.command = command;
 		this.actionMethodName = actionMethodName;
-		
-		switch(actionMethodName){
-		case "signup" : 
+
+		switch (actionMethodName) {
+		case "signup":
 			doSignUp();
 			break;
-		case "signin" :
+		case "signin":
 			doSignIn();
 			break;
-		case "signout" :
+		case "signout":
 			dosignout();
 			break;
-		default :
+		default:
 			System.out.print("this command is not exist\n");
 		}
 	}
-	
+
 	private void dosignout() {
-		if ( isSignined() == false) {
+		if (isSignined() == false) {
 			System.out.println("you are not signined before");
 			return;
 		}
 		loginedMember = null;
 		System.out.println("you are sign out now");
-		
+
 	}
+
 	private int getMemberindexById(String loginId) {
 		int i = 0;
 		for (Member member : members) {
@@ -67,9 +69,8 @@ public class MemberController extends Controller {
 		return false;
 	}
 
-	
 	public void doSignUp() {
-		
+
 		int id = members.size() + 1;
 		String regDate = Util.getNowDatestr();
 		String loginId = null;
@@ -98,73 +99,75 @@ public class MemberController extends Controller {
 			if (loginPw.equals(loginPwCf) == false) {
 				System.out.printf("비밀번호가 일치하지 않습니다 다시 입력하여주십시오.\n");
 				continue;
-			}else {
-		
-			break;
-			
+			} else {
+
+				break;
+
 			}
-			
-			}
-		
-			Member member = new Member(id, loginId, loginPw, name, regDate);
-			members.add(member);
-			System.out.printf("%d번째 회원가입이 완료되었습니다. Regstered Time : %s\n", id, regDate);
-			
-			
-			
-		
+
+		}
+
+		Member member = new Member(id, loginId, loginPw, name, regDate);
+		members.add(member);
+		System.out.printf("%d번째 회원가입이 완료되었습니다. Regstered Time : %s\n", id, regDate);
+
 	}
+
 	public void doSignIn() {
-		if(isSignined()) {
+		if ( isSignined() ) {
 			System.out.println("you are already signined");
 			return;
 		}
-	
-		System.out.print("ID ) " );
+
+		System.out.print("ID ) ");
 		String userId = sc.nextLine();
-		System.out.println("PW ) ");
+		System.out.print("PW ) ");
 		String userPW = sc.nextLine();
-		
+
 		Member member = getMemberByuserId(userId);
-		
-		if ( member == null) {
+
+		if (member == null) {
 			System.out.println("this user is not exist please try again or do sign up");
+			return;
 		}
-		if(member.loginPw.equals(userPW)==false) {
+		if (member.loginPw.equals(userPW) == false) {
 			System.out.println("check your password again");
+			return;
 		}
-		
+
 		loginedMember = member;
-		
-		System.out.printf("welcome %s",loginedMember.name);
-		
+
+		System.out.printf("welcome %s\n", loginedMember.name);
+
 	}
-			private Member getMemberByuserId(String userId) {
-				int index = getMemberindexByUserId(userId);
-				
-				if( index == -1) {
-					return null;
-				}
-				
+
+	private Member getMemberByuserId(String userId) {
+		int index = getMemberindexByUserId(userId);
+		if (index == -1) {
+			return null;
+		}
+
 		return members.get(index);
 	}
-			private int getMemberindexByUserId(String userId) {
-				int i = 0;
-				for (Member member : members) {
-					if (member.loginId == userId) {
-						return i;
-					}
-				}
-				return -1;
-			}
-			public void domakeTestDatas() {
-				System.out.println("==테스트 계정을 생성합니다..==");
 
-				members.add(new Member(1, "admin", "admin", "관리자", Util.getNowDatestr()));
-				members.add(new Member(2, "user1", "123", "사용자1", Util.getNowDatestr()));
-				members.add(new Member(3, "user2", "123", "사용자2", Util.getNowDatestr()));
-
-				
+	private int getMemberindexByUserId(String userId) {
+		int i = 0;
+		for (Member member : members) {
+			if (member.loginId.equals(userId)) {
+				return i;
 			}
-			
+			i++;
+		}
+		return -1;
+	}
+
+	public void domakeTestDatas() {
+		System.out.println("==테스트 계정을 생성합니다.==");
+
+		members.add(new Member(1, "admin", "admin", "관리자", Util.getNowDatestr()));
+		members.add(new Member(2, "user1", "123", "사용자1", Util.getNowDatestr()));
+		members.add(new Member(3, "user2", "123", "사용자2", Util.getNowDatestr()));
+
+	}
+
 }
