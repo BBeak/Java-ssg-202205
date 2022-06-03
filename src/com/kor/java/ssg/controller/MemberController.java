@@ -3,6 +3,7 @@ package com.kor.java.ssg.controller;
 import java.util.List;
 import java.util.Scanner;
 
+import com.kor.java.ssg.Container.Container;
 import com.kor.java.ssg.dto.Article;
 import com.kor.java.ssg.dto.Member;
 import com.kor.java.ssg.util.Util;
@@ -13,9 +14,10 @@ public class MemberController extends Controller {
 	private String command;
 	private String actionMethodName;
 	
+	
 
-	public MemberController(Scanner sc, List<Member> members) {
-		this.members = members;
+	public MemberController(Scanner sc ) {
+		members = Container.memberDao.members;
 		this.sc = sc;
 	}
 
@@ -71,7 +73,7 @@ public class MemberController extends Controller {
 
 	public void doSignUp() {
 
-		int id = members.size() + 1;
+		int id = Container.memberDao.getNewId();
 		String regDate = Util.getNowDatestr();
 		String loginId = null;
 		String name = null;
@@ -108,7 +110,7 @@ public class MemberController extends Controller {
 		}
 
 		Member member = new Member(id, loginId, loginPw, name, regDate);
-		members.add(member);
+		Container.memberDao.add(member);
 		System.out.printf("%d번째 회원가입이 완료되었습니다. Regstered Time : %s\n", id, regDate);
 
 	}
@@ -164,9 +166,9 @@ public class MemberController extends Controller {
 	public void domakeTestDatas() {
 		System.out.println("==테스트 계정을 생성합니다.==");
 
-		members.add(new Member(1, "admin", "admin", "관리자", Util.getNowDatestr()));
-		members.add(new Member(2, "user1", "123", "사용자1", Util.getNowDatestr()));
-		members.add(new Member(3, "user2", "123", "사용자2", Util.getNowDatestr()));
+		Container.memberDao.add(new Member(Container.memberDao.getNewId(), "admin", "admin", "관리자", Util.getNowDatestr()));
+		Container.memberDao.add(new Member(Container.memberDao.getNewId(), "user1", "123", "사용자1", Util.getNowDatestr()));
+		Container.memberDao.add(new Member(Container.memberDao.getNewId(), "user2", "123", "사용자2", Util.getNowDatestr()));
 
 	}
 

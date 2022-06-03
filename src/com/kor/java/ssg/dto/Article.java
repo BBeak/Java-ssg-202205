@@ -9,23 +9,23 @@ public class Article extends Dto {
 	public int hit;
 	public int memberId;
 
-	public Article(int id, String title, String body, int memberId, String userId, String regDate) {
+	public Article(int id, String title, String body, int memberId, String regDate) {
 		this.id = id;
 		this.title = title;
 		this.body = body;
-		this.userId = userId;
-		this.regDate = regDate;
 		this.memberId = memberId;
+		this.regDate = regDate;
 	}
-	public Article(int id, String title, String body, String userId, String regDate) {
+
+	public Article(int id, String title, String body, String regDate) {
 		this.id = id;
 		this.title = title;
 		this.body = body;
-		this.userId = userId;
+
 		this.regDate = regDate;
-		
+
 	}
-	
+
 	public void increastHit() {
 		hit++;
 	}

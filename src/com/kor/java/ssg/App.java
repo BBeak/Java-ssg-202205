@@ -24,8 +24,8 @@ public class App {
 
 		Scanner sc = new Scanner(System.in);
 
-		MemberController memberController = new MemberController(sc, members);
-		ArticleController articleController = new ArticleController(sc, list);
+		MemberController memberController = new MemberController(sc);
+		ArticleController articleController = new ArticleController(sc);
 		articleController.domakeTestData();
 		memberController.domakeTestDatas();
 		Controller controller = null;
