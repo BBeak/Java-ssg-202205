@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import com.kor.java.ssg.controller.ArticleController;
 import com.kor.java.ssg.controller.Controller;
+import com.kor.java.ssg.controller.ExportController;
 import com.kor.java.ssg.controller.MemberController;
 import com.kor.java.ssg.dto.Article;
 import com.kor.java.ssg.dto.Member;
@@ -26,6 +27,7 @@ public class App {
 
 		MemberController memberController = new MemberController(sc);
 		ArticleController articleController = new ArticleController(sc);
+		ExportController exportController = new ExportController(sc);
 		articleController.domakeTestData();
 		memberController.domakeTestDatas();
 		Controller controller = null;
@@ -55,10 +57,13 @@ public class App {
 			}
 			else if (controllerName.equals("member")) {
 				controller = memberController;
-			}else {
+			}else if (controllerName.equals("export")) {
+				controller = exportController;
+			}
+			else {
 				System.out.printf("%s는 올바른 명령어가 아닙니다.\n", command);
 
-			}
+			} 
 			
 		
 			

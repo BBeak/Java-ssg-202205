@@ -36,7 +36,7 @@ public class MemberController extends Controller {
 			dosignout();
 			break;
 		default:
-			System.out.print("this command is not exist\n");
+			System.out.print("존재하지 않는 명령어입니다.\n");
 		}
 	}
 
